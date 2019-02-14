@@ -60,7 +60,7 @@ public class AllUsersPresenter extends MvpPresenter<AllUsersView> {
 
 
     public void showUser(int index, String name) {
-
+        getViewState().showUser(index,name);
     }
 
 }

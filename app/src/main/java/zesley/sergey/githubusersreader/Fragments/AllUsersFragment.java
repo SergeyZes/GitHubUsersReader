@@ -17,6 +17,7 @@ import java.util.List;
 import zesley.sergey.githubusersreader.Detailed.AllUsersAdapter;
 import zesley.sergey.githubusersreader.Detailed.OneUser;
 import zesley.sergey.githubusersreader.Presenters.AllUsersPresenter;
+import zesley.sergey.githubusersreader.Presenters.MainActivityPresenter;
 import zesley.sergey.githubusersreader.R;
 import zesley.sergey.githubusersreader.AllUsersView;
 
@@ -27,6 +28,11 @@ public class AllUsersFragment extends MvpAppCompatFragment implements AllUsersVi
 
     @InjectPresenter
     AllUsersPresenter presenter;
+
+    private MainActivityPresenter mMainActivityPresenter;
+    public void setAcivityPresenter(MainActivityPresenter mMainActivityPresenter){
+        this.mMainActivityPresenter=mMainActivityPresenter;
+    }
 
     public AllUsersFragment() {
         // Required empty public constructor
@@ -57,7 +63,11 @@ public class AllUsersFragment extends MvpAppCompatFragment implements AllUsersVi
     }
 
     @Override
-    public void onClick(int index, String name) {
+    public void showUser(int index, String name) {
+    }
 
+    @Override
+    public void onClick(int index, String name) {
+       presenter.showUser(index,name);
     }
 }

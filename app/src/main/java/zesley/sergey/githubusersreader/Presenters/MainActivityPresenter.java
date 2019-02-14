@@ -1,5 +1,7 @@
 package zesley.sergey.githubusersreader.Presenters;
 
+import android.os.Bundle;
+
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
@@ -12,6 +14,9 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
 
     public MainActivityPresenter() {
         allUsersFragment = new AllUsersFragment();
+        allUsersFragment.setAcivityPresenter(this);
+
+
         getViewState().showFragment(allUsersFragment);
     }
     public void onDismissMessage(){
@@ -25,4 +30,9 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
     public void showMessage(){
         getViewState().showMessage();
     }
+
+    public void showUser(int index, String name) {
+    }
+
+
 }
