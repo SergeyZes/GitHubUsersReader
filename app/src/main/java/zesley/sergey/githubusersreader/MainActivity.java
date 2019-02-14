@@ -2,49 +2,63 @@ package zesley.sergey.githubusersreader;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import zesley.sergey.githubusersreader.Fragments.AllUsersFragment;
+import zesley.sergey.githubusersreader.Presenters.MainActivityPresenter;
+
+public class MainActivity extends MvpAppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,MainActivityView {
+    @InjectPresenter
+    MainActivityPresenter presenter;
+
+    private FloatingActionButton fab;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        initUi();
+    }
+
+    private void initUi(){
+        Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        fab = findViewById(R.id.fab);
+
+        fab.setOnClickListener(view ->{
+            presenter.showMessage();
+
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -94,8 +108,42 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void showFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_container,fragment).commit();
+        if(fragment instanceof AllUsersFragment) fab.show(); else fab.hide();
+    }
+
+    @Override
+    public void hideMessage() {
+       if(dialog!=null) dialog.dismiss();
+    }
+
+    @Override
+    public void showMessage() {
+        EditText input = new EditText(this);
+        dialog = new AlertDialog.Builder(MainActivity.this).setTitle("Введите имя пользователя")
+                .setView(input)
+                .setOnDismissListener(dialog1 -> {presenter.onDismissMessage();})
+                .setPositiveButton("OK", (dialog, which) -> {
+                    presenter.addNewUser(input.getText().toString());
+                    dialog.dismiss();
+                }).setNegativeButton("Отмена", (dialog, which) -> {
+                    dialog.dismiss();
+                }).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(dialog!=null){
+            dialog.setOnDismissListener(null);
+            dialog.dismiss();
+        }
     }
 }
