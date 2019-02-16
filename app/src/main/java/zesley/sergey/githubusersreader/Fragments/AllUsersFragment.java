@@ -77,4 +77,9 @@ public class AllUsersFragment extends MvpAppCompatFragment implements AllUsersVi
        showUser(index,name);
         //presenter.showUser(index,name);
     }
+
+    @Override
+    public void onDelClick(int index, String name) {
+        presenter.removeUser(index,name);
+    }
 }

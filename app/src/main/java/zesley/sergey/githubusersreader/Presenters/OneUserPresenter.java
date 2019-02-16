@@ -36,12 +36,12 @@ public class OneUserPresenter extends MvpPresenter<OneUserView> implements Obser
 
     @Override
     public void onNext(GithubUser githubUser) {
-        getViewState().showUserData(githubUser.getId(),githubUser.getLogin(),githubUser.getAvatar());
+        getViewState().showUserData(githubUser.getId(),githubUser.getLogin(),githubUser.getAvatar(),githubUser.getHtml_url());
     }
 
     @Override
     public void onError(Throwable e) {
-        getViewState().showUserData("",e.getMessage(),"404");
+        getViewState().showUserData("",e.getMessage(),"404","");
     }
 
     @Override

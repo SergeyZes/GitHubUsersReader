@@ -33,4 +33,11 @@
         android:layout_height="wrap_content"
         android:text="@string/nav_header_subtitle" />
 
+    <TextView
+        android:layout_marginTop="4dp"
+        android:text="Данная программа предназначена для просмотра пользователей Github."
+        android:maxLines="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

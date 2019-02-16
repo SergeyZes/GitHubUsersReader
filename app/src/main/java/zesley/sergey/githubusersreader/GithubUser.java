@@ -15,6 +15,9 @@ public class GithubUser {
     @Expose
     private String id;
 
+    @SerializedName("html_url")
+    @Expose
+    private String html_url;
 
     @Nullable
     public String getAvatar() {
@@ -28,5 +31,9 @@ public class GithubUser {
 
     public String getId() {
         return id;
+    }
+
+    public String getHtml_url() {
+        return html_url;
     }
 }

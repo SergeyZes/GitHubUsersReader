@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.ViewHo
         String userName = allUsers.get(i).getName();
         viewHolder.userLabel.setText(userName);
         viewHolder.itemView.setOnClickListener(v -> listener.onClick(i, userName));
+        viewHolder.imageView.setOnClickListener(v -> listener.onDelClick(i,userName));
     }
 
     @Override
@@ -42,14 +44,17 @@ public class AllUsersAdapter extends RecyclerView.Adapter<AllUsersAdapter.ViewHo
 
     public interface OnUserClickListener {
         void onClick(int index, String name);
+        void onDelClick(int index, String name);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView userLabel;
+        ImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userLabel = itemView.findViewById(R.id.one_user_label);
+            imageView = itemView.findViewById(R.id.one_user_remove);
         }
     }
 }

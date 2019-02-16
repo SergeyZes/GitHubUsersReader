@@ -25,6 +25,7 @@ public class OneUserFragment extends MvpAppCompatFragment implements OneUserView
     private ImageView userFace;
     private TextView userId;
     private TextView userName;
+    private TextView userHtml;
 
     public OneUserFragment() {
         // Required empty public constructor
@@ -51,6 +52,7 @@ public class OneUserFragment extends MvpAppCompatFragment implements OneUserView
         userFace = view.findViewById(R.id.user_face);
         userId = view.findViewById(R.id.user_id);
         userName = view.findViewById(R.id.user_name);
+        userHtml = view.findViewById(R.id.user_html);
 
         return view;
     }
@@ -69,9 +71,10 @@ public class OneUserFragment extends MvpAppCompatFragment implements OneUserView
     }
 
     @Override
-    public void showUserData(String id, String name, String avatar) {
+    public void showUserData(String id, String name, String avatar, String html) {
         userId.setText(id);
         userName.setText(name);
+        userHtml.setText(html);
 
         if(avatar.equals("404")) userFace.setImageBitmap(null); else Picasso.get().load(avatar).into(userFace);
 

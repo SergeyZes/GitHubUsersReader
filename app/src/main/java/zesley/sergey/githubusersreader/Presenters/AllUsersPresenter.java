@@ -42,6 +42,16 @@ public class AllUsersPresenter extends MvpPresenter<AllUsersView> {
 
     }
 
+    public void removeUser(int index, String name){
+        SQLiteDatabase db = workWithDB.getWritableDatabase();
+        db.delete(WorkWithDB.TABLE_USERS,WorkWithDB.COLUMN_USER_NAME+" = ?",new String[]{name});
+        db.close();
+        initUsersList();
+        getViewState().showAllUsers(allUsers);
+
+
+    }
+
     private void initUsersList() {
         allUsers.clear();
 
