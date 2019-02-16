@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.PresenterType;
 
 import java.util.List;
 
@@ -23,10 +25,11 @@ import zesley.sergey.githubusersreader.AllUsersView;
 
 
 public class AllUsersFragment extends MvpAppCompatFragment implements AllUsersView,AllUsersAdapter.OnUserClickListener {
+    private static final String TAG="AllUsersPresenter";
 
     private RecyclerView allUsersList;
 
-    @InjectPresenter
+    @InjectPresenter(type = PresenterType.GLOBAL)
     AllUsersPresenter presenter;
 
     private MainActivityPresenter mMainActivityPresenter;
@@ -36,6 +39,8 @@ public class AllUsersFragment extends MvpAppCompatFragment implements AllUsersVi
 
     public AllUsersFragment() {
         // Required empty public constructor
+        setRetainInstance(true);
+        Log.i(TAG,"AllUsersFragment");
     }
 
     public void addNewUser(String usr){
@@ -64,10 +69,12 @@ public class AllUsersFragment extends MvpAppCompatFragment implements AllUsersVi
 
     @Override
     public void showUser(int index, String name) {
+        mMainActivityPresenter.showUser(index,name);
     }
 
     @Override
     public void onClick(int index, String name) {
-       presenter.showUser(index,name);
+       showUser(index,name);
+        //presenter.showUser(index,name);
     }
 }

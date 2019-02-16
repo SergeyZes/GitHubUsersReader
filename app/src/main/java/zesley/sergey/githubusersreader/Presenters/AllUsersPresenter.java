@@ -3,6 +3,7 @@ package zesley.sergey.githubusersreader.Presenters;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -17,6 +18,7 @@ import zesley.sergey.githubusersreader.AllUsersView;
 
 @InjectViewState
 public class AllUsersPresenter extends MvpPresenter<AllUsersView> {
+    private static final String TAG = "AllUsersPresenter";
     private List<OneUser> allUsers;
     private WorkWithDB workWithDB;
 
@@ -25,6 +27,7 @@ public class AllUsersPresenter extends MvpPresenter<AllUsersView> {
         allUsers=new ArrayList<>();
         initUsersList();
         getViewState().showAllUsers(allUsers);
+        Log.i(TAG,"AllUsersPresenter");
 
     }
 

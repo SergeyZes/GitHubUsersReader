@@ -1,23 +1,40 @@
 package zesley.sergey.githubusersreader.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.PresenterType;
+import com.squareup.picasso.Picasso;
 
 import zesley.sergey.githubusersreader.OneUserView;
+import zesley.sergey.githubusersreader.Presenters.OneUserPresenter;
 import zesley.sergey.githubusersreader.R;
 
 public class OneUserFragment extends MvpAppCompatFragment implements OneUserView {
 
+    @InjectPresenter(type = PresenterType.GLOBAL)
+    OneUserPresenter presenter2;
+
+    private ImageView userFace;
+    private TextView userId;
+    private TextView userName;
 
     public OneUserFragment() {
         // Required empty public constructor
+        setRetainInstance(true);
+    }
+    public void showUser(int index, String name) {
+        if(presenter2==null){
+            this.getMvpDelegate().onCreate();
+        }
+        presenter2.showUser(index, name);
     }
 
 
@@ -30,7 +47,12 @@ public class OneUserFragment extends MvpAppCompatFragment implements OneUserView
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_one_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_one_user, container, false);
+        userFace = view.findViewById(R.id.user_face);
+        userId = view.findViewById(R.id.user_id);
+        userName = view.findViewById(R.id.user_name);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -46,18 +68,13 @@ public class OneUserFragment extends MvpAppCompatFragment implements OneUserView
         super.onDetach();
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void showUserData(String id, String name, String avatar) {
+        userId.setText(id);
+        userName.setText(name);
+
+        if(avatar.equals("404")) userFace.setImageBitmap(null); else Picasso.get().load(avatar).into(userFace);
+
     }
+
 }
