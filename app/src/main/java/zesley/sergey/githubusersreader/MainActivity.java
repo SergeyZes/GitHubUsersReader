@@ -15,14 +15,17 @@ import android.widget.EditText;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.PresenterType;
 
 import zesley.sergey.githubusersreader.Fragments.AllUsersFragment;
+import zesley.sergey.githubusersreader.Fragments.OneUserFragment;
 import zesley.sergey.githubusersreader.Presenters.MainActivityPresenter;
 
 public class MainActivity extends MvpAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MainActivityView {
     @InjectPresenter
     MainActivityPresenter presenter;
+
 
     private FloatingActionButton fab;
     private AlertDialog dialog;
@@ -62,6 +65,7 @@ public class MainActivity extends MvpAppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            if (presenter.oneUserFragment.isAdded()) presenter.showAllUsersFragment(); else
             super.onBackPressed();
         }
     }
@@ -94,19 +98,6 @@ public class MainActivity extends MvpAppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -136,6 +127,15 @@ public class MainActivity extends MvpAppCompatActivity
                 }).setNegativeButton("Отмена", (dialog, which) -> {
                     dialog.dismiss();
                 }).show();
+    }
+
+    @Override
+    public void showUser(int index, String name, OneUserFragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_activity_container,fragment).commit();
+        fab.hide();
+        fragment.showUser(index,name);
+       // presenter2.showUser(index,name);
+
     }
 
     @Override

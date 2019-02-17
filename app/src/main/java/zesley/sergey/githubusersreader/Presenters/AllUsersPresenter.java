@@ -3,6 +3,7 @@ package zesley.sergey.githubusersreader.Presenters;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -17,6 +18,7 @@ import zesley.sergey.githubusersreader.AllUsersView;
 
 @InjectViewState
 public class AllUsersPresenter extends MvpPresenter<AllUsersView> {
+    private static final String TAG = "AllUsersPresenter";
     private List<OneUser> allUsers;
     private WorkWithDB workWithDB;
 
@@ -25,6 +27,7 @@ public class AllUsersPresenter extends MvpPresenter<AllUsersView> {
         allUsers=new ArrayList<>();
         initUsersList();
         getViewState().showAllUsers(allUsers);
+        Log.i(TAG,"AllUsersPresenter");
 
     }
 
@@ -36,6 +39,16 @@ public class AllUsersPresenter extends MvpPresenter<AllUsersView> {
         db.close();
         initUsersList();
         getViewState().showAllUsers(allUsers);
+
+    }
+
+    public void removeUser(int index, String name){
+        SQLiteDatabase db = workWithDB.getWritableDatabase();
+        db.delete(WorkWithDB.TABLE_USERS,WorkWithDB.COLUMN_USER_NAME+" = ?",new String[]{name});
+        db.close();
+        initUsersList();
+        getViewState().showAllUsers(allUsers);
+
 
     }
 
@@ -60,7 +73,7 @@ public class AllUsersPresenter extends MvpPresenter<AllUsersView> {
 
 
     public void showUser(int index, String name) {
-
+        getViewState().showUser(index,name);
     }
 
 }
